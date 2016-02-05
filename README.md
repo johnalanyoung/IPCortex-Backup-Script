@@ -8,8 +8,11 @@ Powershell / Wget
 
 ## Future Improvements
 Deleting aged backups after a predefined point
+
 Duplicate backup prevention
+
 Successful/unsuccessful error messages
+
 Email notifications
 
 ## Future Tests
