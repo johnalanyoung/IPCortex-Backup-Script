@@ -1,5 +1,5 @@
 # IPCortex-Backup-Script
-Personal IPCortex Backup Script
+IPCortex Backup Script
 
 This script remotely downloads backup files from an IPCortex PABX.
 
@@ -11,9 +11,9 @@ Deleting aged backups after a predefined point
 
 Duplicate backup prevention
 
-Successful/unsuccessful error messages
+Successful/unsuccessful error messages via Email notifications
 
-Email notifications
+Seperate file holding connection details and login credentials
 
 ## Future Tests
 Test backups via HTTPS 
