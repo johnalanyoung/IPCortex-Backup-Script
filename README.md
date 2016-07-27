@@ -1,6 +1,4 @@
 # IPCortex-Backup-Script
-IPCortex Backup Script
-
 This script remotely downloads backup files from an IPCortex PABX.
 
 ## Prerequisites
