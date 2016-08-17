@@ -58,5 +58,7 @@ Function Backup-Cortex{
             rm $cookie
             }
 
-            # Hostname and login credentials for IPCortex. User will need relevant permissions needed to pull backups
-            Backup-Cortex -CortexAddress "hostname" -username "username" -password 'password'
+            # Hostname and login credentials for IPCortex stored in seperate csv file. User will need relevant permissions needed to pull backups
+            Import-CSV "X:\IPCortexBackups\Project_Files\Main File\ipcortex_list.csv" -Header IP1,IP2,IP3 | Foreach-Object{
+                Backup-Cortex -CortexAddress $_.IP1 -username $_.IP2 -password $_.IP3
+            }
