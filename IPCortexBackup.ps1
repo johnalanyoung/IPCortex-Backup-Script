@@ -10,7 +10,7 @@ Function Backup-Cortex{
             [string] $password
            )
             # Static variables:
-            $date = Get-Date -Format "dd-MM-yy HHmmss" # Creates date and time which can be used for part of the filename
+            $date = Get-Date -Format "yyyy-MM-dd HHmmss" # Creates date and time which can be used for part of the filename
             $date2 = Get-Date -Format "yyyyMd" # Used for downloading voicemail greetings and system logs
             $BackupLocation = "X:\IPCortexBackups" # Root backup location
             $BackupLocationSysConfig = "X:\IPCortexBackups\1 - System Config and Call Records" # System configuration and call records backup location
