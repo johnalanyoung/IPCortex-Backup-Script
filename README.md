@@ -11,8 +11,6 @@ Duplicate backup prevention
 
 Successful/unsuccessful error messages via Email notifications
 
-Seperate file holding connection details and login credentials
-
 ## Future Tests
 Test backups via HTTPS 
 
