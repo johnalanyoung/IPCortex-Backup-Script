@@ -2,7 +2,11 @@
 This script remotely downloads backup files from an IPCortex PABX.
 
 ## Prerequisites
-Powershell / Wget / .Net
+Powershell - To run the script
+
+Wget - To download the files over HTTP/HTTPS
+
+.Net - This is used to fix an issue with passwords with special characters
 
 ## Future Improvements
 
