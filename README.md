@@ -9,7 +9,7 @@ Powershell / Wget
 Successful/unsuccessful error messages via Email notifications
 
 ## Future Tests
-Test backups via HTTPS 
+- none -
 
 ## Notes
 Call recordings natively exprire after 21 days on IPCortex HDD. This cannot be changed.
