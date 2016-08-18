@@ -5,9 +5,6 @@ This script remotely downloads backup files from an IPCortex PABX.
 Powershell / Wget
 
 ## Future Improvements
-Deleting aged backups after a predefined point
-
-Duplicate backup prevention
 
 Successful/unsuccessful error messages via Email notifications
 
