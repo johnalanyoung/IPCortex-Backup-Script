@@ -22,33 +22,33 @@ Function Backup-Cortex{
             $cookie = "$BackupLocation/ipcortex_cookie.txt" # Cookie filename and file location
             $tempuser = [System.Net.WebUtility]::UrlEncode($username) # Encodes the username in case special characters are used to ensure complicated usernames work
             $temppassword = [System.Net.WebUtility]::UrlEncode($password) # Encodes the password in case special characters are used to ensure complicated passwords work
-            $CortexLoginURL = "http://$CortexAddress/login.whtm?sessionUser=$tempuser&sessionPass=$temppassword" # Creates login URL
-            $CortexDownloadURL = "http://$CortexAddress/admin/backup.whtm/update/backup.tar.gz" # Creates system configuration and call records download URL
-            $CortexIVRDownloadURL = "http://$CortexAddress/admin/backup.whtm/update/ivr.tar.gz" # Creates IVR sound files download URL
-            $CortexVMGreetDownloadURL = "http://$CortexAddress/admin/backup.whtm/vmgreet$date2.tar.gz" # Creates voicemail greetings download URL
-            $CortexLogDownloadURL = “http://$CortexAddress/admin/backup.whtm/logs$date2.tar.gz” # Creates system logs download URL
-            $CortexCallRecordingURL = "http://$CortexAddress/link/monitor.whtm" # Creates call recordings download URL
+            $CortexLoginURL = "https://$CortexAddress/login.whtm?sessionUser=$tempuser&sessionPass=$temppassword" # Creates login URL
+            $CortexDownloadURL = "https://$CortexAddress/admin/backup.whtm/update/backup.tar.gz" # Creates system configuration and call records download URL
+            $CortexIVRDownloadURL = "https://$CortexAddress/admin/backup.whtm/update/ivr.tar.gz" # Creates IVR sound files download URL
+            $CortexVMGreetDownloadURL = "https://$CortexAddress/admin/backup.whtm/vmgreet$date2.tar.gz" # Creates voicemail greetings download URL
+            $CortexLogDownloadURL = “https://$CortexAddress/admin/backup.whtm/logs$date2.tar.gz” # Creates system logs download URL
+            $CortexCallRecordingURL = "https://$CortexAddress/link/monitor.whtm" # Creates call recordings download URL
             $Wgetlocation = "C:\Program Files (x86)\GnuWin32\bin" # File location for Wget
 
             cd $Wgetlocation
 
-            # Starts first download and logs into IPCortex - Requires 2 max re-directs over http
-            .\wget.exe -O $tempfile --max-redirect=2 --save-cookies=$cookie --tries=1 $CortexLoginURL
+            # Starts first download and logs into IPCortex - Requires 2 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $tempfile --max-redirect=2 --save-cookies=$cookie --tries=1 $CortexLoginURL
             
-            # Downloads live update of system configuration and call records - Requires 1 max re-directs over http
-            .\wget.exe -O $BackupLocationSysConfig\$date.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexDownloadURL
+            # Downloads live update of system configuration and call records - Requires 1 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $BackupLocationSysConfig\$date.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexDownloadURL
 
-            # Downloads IVR sound files - Requires 1 max re-directs over http
-            .\wget.exe -O $BackupLocationIVR\"$date-ivr.tar.gz" --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexIVRDownloadURL
+            # Downloads IVR sound files - Requires 1 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $BackupLocationIVR\"$date-ivr.tar.gz" --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexIVRDownloadURL
 			
-            # Downloads voicemail greetings - Requires 1 max re-directs over http
-            .\wget.exe -O $BackupLocationVMGreet\$date-vmgreet.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexVMGreetDownloadURL
+            # Downloads voicemail greetings - Requires 1 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $BackupLocationVMGreet\$date-vmgreet.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexVMGreetDownloadURL
 
-            # Downloads system logs - Requires 1 max re-directs over http
-            .\wget.exe -O $BackupLocationSysLogs\$date-logs.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexLogDownloadURL
+            # Downloads system logs - Requires 1 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $BackupLocationSysLogs\$date-logs.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexLogDownloadURL
 
-            # Downloads call recordings - Requires 1 max re-directs over http
-            .\wget.exe -O $tempfile --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexCallRecordingURL
+            # Downloads call recordings - Requires 1 max re-directs over http/s
+            .\wget.exe --no-check-certificate -O $tempfile --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexCallRecordingURL
             $CortexCallRecordFile = (gc $tempfile | % { if($_ -match "_default.cgi/recorded.tar.gz") {$_.substring(13,$_.length-13-37)}})
             $CortexCallRecordFileUrl = "http://$CortexAddress$CortexCallRecordFile"
             .\wget.exe -O $BackupLocationCallRec\"$date-recordings.tar.gz" --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexCallRecordFileUrl
