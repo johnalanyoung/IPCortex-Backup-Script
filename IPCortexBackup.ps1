@@ -1,7 +1,7 @@
-﻿#--------------------------------------------------- 
+#--------------------------------------------------- 
 # Script: IPCortexBackup.ps1
 # Author: johnalanyoung (http://johnalanyoung.com)
-#--------------------------------------------------- 
+#---------------------------------------------------
 
 Function Backup-Cortex{
     param  (
@@ -11,6 +11,7 @@ Function Backup-Cortex{
            )
             # Static variables:
             $date = Get-Date -Format "yyyy-MM-dd HHmmss" # Creates date and time which can be used for part of the filename
+            $date2 = Get-Date -Format "yyyyMd" # Used for downloading voicemail greetings and system logs
             $BackupLocation = "X:\IPCortexBackups" # Root backup location
             $BackupLocationSysConfig = "X:\IPCortexBackups\1 - System Config and Call Records" # System configuration and call records backup location
             $BackupLocationIVR = "X:\IPCortexBackups\2 - IVR Sound Files" # IVR sound files backup location
@@ -18,7 +19,7 @@ Function Backup-Cortex{
             $BackupLocationSysLogs = "X:\IPCortexBackups\4 - System Logs" # System logs backup location
             $BackupLocationCallRec = "X:\IPCortexBackups\5 - Call Recordings" # Call recordings backup location
             $tempfile = "$BackupLocation\tmp.txt" # Temporary file filename and location
-            $cookie = "$BackupLocation/johnalanyoung_ipcortex_cookie.txt" # Cookie filename and file location
+            $cookie = "$BackupLocation/ipcortex_cookie.txt" # Cookie filename and file location
             $tempuser = [System.Net.WebUtility]::UrlEncode($username) # Encodes the username in case special characters are used to ensure complicated usernames work
             $temppassword = [System.Net.WebUtility]::UrlEncode($password) # Encodes the password in case special characters are used to ensure complicated passwords work
             $CortexLoginURL = "http://$CortexAddress/login.whtm?sessionUser=$tempuser&sessionPass=$temppassword" # Creates login URL
@@ -31,27 +32,27 @@ Function Backup-Cortex{
 
             cd $Wgetlocation
 
-            # Starts first download and logs into IPCortex
-            .\wget.exe -O $tempfile --max-redirect=1 --save-cookies=$cookie --tries=1 $CortexLoginURL
+            # Starts first download and logs into IPCortex - Requires 2 max re-directs over http
+            .\wget.exe -O $tempfile --max-redirect=2 --save-cookies=$cookie --tries=1 $CortexLoginURL
             
-            # Downloads live update of system configuration and call records
+            # Downloads live update of system configuration and call records - Requires 1 max re-directs over http
             .\wget.exe -O $BackupLocationSysConfig\$date.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexDownloadURL
 
-            # Downloads IVR sound files
+            # Downloads IVR sound files - Requires 1 max re-directs over http
             .\wget.exe -O $BackupLocationIVR\"$date-ivr.tar.gz" --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexIVRDownloadURL
-
-            # Downloads voicemail greetings
+			
+            # Downloads voicemail greetings - Requires 1 max re-directs over http
             .\wget.exe -O $BackupLocationVMGreet\$date-vmgreet.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexVMGreetDownloadURL
 
-            # Downloads system logs
+            # Downloads system logs - Requires 1 max re-directs over http
             .\wget.exe -O $BackupLocationSysLogs\$date-logs.tar.gz --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexLogDownloadURL
 
-            # Downloads call recordings
+            # Downloads call recordings - Requires 1 max re-directs over http
             .\wget.exe -O $tempfile --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexCallRecordingURL
             $CortexCallRecordFile = (gc $tempfile | % { if($_ -match "_default.cgi/recorded.tar.gz") {$_.substring(13,$_.length-13-37)}})
             $CortexCallRecordFileUrl = "http://$CortexAddress$CortexCallRecordFile"
             .\wget.exe -O $BackupLocationCallRec\"$date-recordings.tar.gz" --max-redirect=1 --load-cookies=$cookie --tries=1 $CortexCallRecordFileUrl
-
+            
             # Deletes temporary file and cookie
             rm $tempfile
             rm $cookie
