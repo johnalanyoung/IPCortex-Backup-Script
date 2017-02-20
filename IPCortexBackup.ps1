@@ -1,6 +1,6 @@
 #--------------------------------------------------- 
 # Script: IPCortexBackup.ps1
-# Author: johnalanyoung (http://johnalanyoung.com)
+# Author: johnalanyoung (http://www.johnyoung.tech)
 #---------------------------------------------------
 
 Function Backup-Cortex{
